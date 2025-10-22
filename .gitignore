@@ -4,3 +4,7 @@ __pycache__/
 baml_client/
 venv/
 .DS_Store
+.env
+papers/
+papers/*.pdf
+extracted_articles.json
