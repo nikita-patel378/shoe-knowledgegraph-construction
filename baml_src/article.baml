@@ -3,47 +3,45 @@ class Article {
   authors string[]?
   publication_year int?
   
-  // Just the key takeaways
+  // Key takeaways from research
   keypoints string[]
-  @description("List of practical insights about shoe features and their effects")
-  
-  // One-liner summary
-  practical_summary string?
-  @description("Bottom line: what should runners know from this research? (1-2 sentences max)")
+  @description("3-5 key insights about shoe features and their effects")
 }
 
 function ExtractArticle(article: pdf) -> Article {
-  client CustomHaiku
+  client ClaudeClient
   prompt #"
-    Extract details and practical insights from the research paper.
+    Extract key information and insights from this running shoe research paper.
     
     Research content:
     {{ article }}
     
-    Your goal: Help runners of all levels understand what shoe features actually matter.
+    Extract:
+    - Title, authors, and publication year
+    - 3-5 keypoints as separate statements
     
-    Extract 3-5 keypoints as separate bullet points. Each keypoint should be:
-    - Clear and actionable
-    - About specific shoe features and their real-world effects
-    - Backed by the research findings
+    Each keypoint should be:
+    - Written for runners, not researchers (avoid technical jargon like "knee joint negative work" or "vertical ground reaction force")
+    - About what shoe features do in practice, not study measurements
+    - Include specific numbers when relevant (percentages, speeds, weights)
+    - Translate findings into "what this means for shoe choice"
     
-    Examples of good keypoints:
-    - "Maximalist cushioning increases leg stiffness, especially at faster speeds (14.5 km/h)"
-    - "Highly cushioned shoes amplify impact loading rather than reduce it"
-    - "More cushioning does not correlate with fewer running injuries"
+    Good keypoint examples:
+    - "Maximalist cushioning increases leg stiffness by 15% at speeds above 14 km/h, making them less effective for faster running"
+    - "Carbon plates provide minimal performance benefit to runners slower than 10 km pace—beginners should prioritize comfort over expensive carbon technology"
+    - "Shoes over 200g significantly increase energy cost for novice runners, suggesting lighter options improve running efficiency"
     
-    Also provide a practical_summary: 1-2 sentences maximum that captures the main takeaway for runners.
+    Bad keypoint examples (too technical):
+    - "C1 showed significantly lower knee joint negative work (p=0.008)"
+    - "Nike Vaporfly 2 demonstrated the lowest loading rates during initial contact"
     
-    Focus on:
-    - What shoe features do (good and bad)
-    - When/why certain features matter
-    - Real effects backed by research, not marketing claims
+    Focus on practical takeaways about shoe features (weight, stiffness, cushioning, carbon plates) that help runners make better shoe choices, not study methodology or biomechanical measurements.
     
     {{ ctx.output_format }}
   "#
 }
 
-// Update test to use a PDF file
+// Test with sample PDF
 test sample_article_pdf {
   functions [ExtractArticle]
   args {

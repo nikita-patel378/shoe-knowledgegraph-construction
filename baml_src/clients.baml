@@ -25,12 +25,14 @@ client<llm> LlamaClient {
 }
 client<llm> CustomGPT{
   provider openai
-  retry_policy Exponential
+  retry_policy Constant
   options {
-    model "gpt-4o-mini"
+    model "gpt-5-mini-2025-08-07"
     api_key env.OPENAI_API_KEY
   }
 }
+
+
 
 client<llm> CustomSonnet {
   provider anthropic
@@ -43,13 +45,28 @@ client<llm> CustomSonnet {
 
 client<llm> CustomHaiku {
   provider anthropic
-  retry_policy Constant
+  retry_policy Exponential
   options {
     model "claude-haiku-4-5-20251001"
     api_key env.ANTHROPIC_API_KEY
   }
 }
 
+client<llm> OpenRouterClient {
+  provider openai-generic
+  options {
+    base_url "https://openrouter.ai/api/v1"
+    model "google/gemini-2.5-flash"
+    api_key env.OPENROUTER_API_KEY
+  }
+}
+
+client<llm> ClaudeClient {
+  provider fallback
+  options {
+    strategy [CustomHaiku, CustomSonnet]
+  }
+}
 // https://docs.boundaryml.com/docs/snippets/clients/round-robin
 client<llm> CustomFast {
   provider round-robin
@@ -79,12 +96,12 @@ retry_policy Constant {
 }
 
 retry_policy Exponential {
-  max_retries 2
+  max_retries 3
   // Strategy is optional
   strategy {
     type exponential_backoff
-    delay_ms 300
-    multiplier 1.5
+    delay_ms 1500
+    multiplier 2
     max_delay_ms 10000
   }
 }
