@@ -6,6 +6,10 @@ class Article {
   // Key takeaways from research
   keypoints string[]
   @description("3-5 key insights about shoe features and their effects")
+
+  //Abstract from paper
+  abstract string[]
+  @description("Abstract from research paper. First paragraph of research paper")
 }
 
 function ExtractArticle(article: pdf) -> Article {
@@ -19,6 +23,7 @@ function ExtractArticle(article: pdf) -> Article {
     Extract:
     - Title, authors, and publication year
     - 3-5 keypoints as separate statements
+    - Abstract of research paper 
     
     Each keypoint should be:
     - Written for runners, not researchers (avoid technical jargon like "knee joint negative work" or "vertical ground reaction force")

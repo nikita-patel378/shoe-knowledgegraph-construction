@@ -33,7 +33,8 @@ def process_papers(papers_dir: str, output_file: str):
                 "title": result.title,
                 "authors": result.authors,
                 "publication_year": result.publication_year,
-                "keypoints": result.keypoints
+                "keypoints": result.keypoints,
+                "abstract": result.abstract
             }
             
             results.append(article_dict)

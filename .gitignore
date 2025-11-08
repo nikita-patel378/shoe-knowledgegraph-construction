@@ -8,3 +8,7 @@ venv/
 papers/
 papers/*.pdf
 extracted_articles.json
+data/
+logs/
+plugins/
+import/
